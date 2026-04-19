@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Health Estimator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator-card">
+        <h2>BMI Health Estimator</h2>
+        
+        <div class="input-group">
+            <label for="age">Age (years):</label>
+            <input type="number" id="age" min="2" max="120" placeholder="Enter age">
+        </div>
+
+        <div class="input-group">
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" placeholder="Enter height">
+        </div>
+
+        <div class="input-group">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="Enter weight">
+        </div>
+
+        <button id="calculate-btn">Check Status</button>
+
+        <div id="results" class="hidden">
+            <p>Your BMI: <span id="bmi-value"></span></p>
+            <p>Status: <strong id="status-text"></strong></p>
+            <p id="disclaimer" class="note"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculate-btn').onclick = function() {
+            const age = parseFloat(document.getElementById('age').value);
+            const heightCm = parseFloat(document.getElementById('height').value);
+            const weightKg = parseFloat(document.getElementById('weight').value);
+            
+            if (!age || !heightCm || !weightKg) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            const bmi = weightKg / ((heightCm / 100) ** 2);
+            const bmiFixed = bmi.toFixed(1);
+            
+            let status = "";
+            let disclaimer = "";
+
+            if (age < 20) {
+                disclaimer = "For ages 2-19, results are based on CDC percentile estimates.";
+                if (bmi < 15) status = "Underweight";
+                else if (bmi < 22) status = "Healthy Weight";
+                else if (bmi < 26) status = "Overweight";
+                else status = "Obese";
+            } else {
+                disclaimer = "Standard adult categories applied.";
+                if (bmi < 18.5) status = "Underweight";
+                else if (bmi < 25) status = "Healthy Weight";
+                else if (bmi < 30) status = "Overweight";
+                else status = "Obese";
+            }
+
+            document.getElementById('bmi-value').textContent = bmiFixed;
+            document.getElementById('status-text').textContent = status;
+            document.getElementById('disclaimer').textContent = disclaimer;
+            document.getElementById('results').classList.remove('hidden');
+        };
+    </script>
+</body>
+</html>
